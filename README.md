@@ -1,12 +1,11 @@
 # Kum Payment Gateway
 
-A simple payment gateway simulation web app built with Laravel, React, Inertia, Vite, and MySQL. It is structured for local development and practical deployment to Bluehost shared hosting from GitHub.
+A simple payment gateway simulation web app built with Laravel, React, Inertia, and Vite. It runs entirely with dummy data and does not require a database connection.
 
 ## Stack
 
 - Laravel 11
 - React 18 with Inertia.js
-- MySQL
 - Tailwind CSS
 - Vite
 
@@ -14,19 +13,17 @@ A simple payment gateway simulation web app built with Laravel, React, Inertia, 
 
 - Public payment checkout simulation form
 - Mock approve, decline, and pending payment outcomes
-- Transaction storage in MySQL
-- Admin dashboard with recent transactions and summary stats
-- Laravel authentication for admin access
+- Session-backed dummy transaction activity
+- Public dashboard with recent transactions and summary stats
 - Deployment notes for Bluehost shared hosting
 
 ## Folder Structure
 
 - `app/Http/Controllers`: page, profile, and payment controllers
 - `app/Http/Requests`: request validation rules
-- `app/Models`: Eloquent models
+- `app/Models`: framework model stubs
 - `app/Services`: payment simulation logic
-- `database/migrations`: database schema
-- `database/seeders`: demo admin and sample transaction records
+- `app/Services/DemoTransactionStore.php`: dummy transaction source
 - `resources/js/Pages/Payments`: React payment page
 - `resources/js/Components/Payments`: reusable payment UI components
 - `public/build`: production frontend assets after Vite build
@@ -47,33 +44,20 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-3. Update `.env` with your MySQL credentials.
+3. Copy the environment defaults. No database setup is needed.
 
 ```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=kum_payment_gateway
-DB_USERNAME=root
-DB_PASSWORD=
+DB_CONNECTION=null
+SESSION_DRIVER=file
+CACHE_STORE=file
+QUEUE_CONNECTION=sync
 ```
 
-4. Run migrations and seed demo data.
-
-```bash
-php artisan migrate --seed
-```
-
-5. Start development.
+4. Start development.
 
 ```bash
 composer run dev
 ```
-
-## Demo Admin Login
-
-- Email: `admin@kumgateway.test`
-- Password: `password`
 
 ## Payment Simulation Rules
 
@@ -96,12 +80,10 @@ npm install
 npm run build
 ```
 
-6. Configure your production `.env` with Bluehost database credentials.
-7. Run:
+6. Configure your production `.env` to keep file-based services:
 
 ```bash
-php artisan migrate --force
-php artisan storage:link
+php artisan optimize:clear
 ```
 
 8. Ensure these directories are writable:
@@ -123,5 +105,4 @@ $app = require_once __DIR__.'/../kum-payment-gateway/bootstrap/app.php';
 ## Notes
 
 - This app simulates payments only.
-- Password reset email delivery needs real mail settings in production.
 - Build assets before going live on shared hosting.

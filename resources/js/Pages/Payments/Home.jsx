@@ -15,8 +15,6 @@ const formatCurrency = (amount, currency) =>
 
 export default function Home({
     auth,
-    canLogin,
-    canRegister,
     transactions,
     simulationRules,
 }) {
@@ -62,43 +60,15 @@ export default function Home({
                         </div>
 
                         <nav className="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-600">
-                            {auth.user ? (
-                                <>
-                                    <Link
-                                        href={route('dashboard')}
-                                        className="rounded-full border border-slate-200 px-4 py-2 transition hover:border-sky-300 hover:text-sky-700"
-                                    >
-                                        Dashboard
-                                    </Link>
-                                    <Link
-                                        href={route('logout')}
-                                        method="post"
-                                        as="button"
-                                        className="rounded-full bg-slate-950 px-4 py-2 text-white"
-                                    >
-                                        Log out
-                                    </Link>
-                                </>
-                            ) : (
-                                <>
-                                    {canLogin && (
-                                        <Link
-                                            href={route('login')}
-                                            className="rounded-full border border-slate-200 px-4 py-2 transition hover:border-sky-300 hover:text-sky-700"
-                                        >
-                                            Admin login
-                                        </Link>
-                                    )}
-                                    {canRegister && (
-                                        <Link
-                                            href={route('register')}
-                                            className="rounded-full bg-slate-950 px-4 py-2 text-white"
-                                        >
-                                            Create admin user
-                                        </Link>
-                                    )}
-                                </>
-                            )}
+                            <Link
+                                href={route('dashboard')}
+                                className="rounded-full border border-slate-200 px-4 py-2 transition hover:border-sky-300 hover:text-sky-700"
+                            >
+                                Dashboard
+                            </Link>
+                            <span className="rounded-full bg-slate-950 px-4 py-2 text-white">
+                                Demo mode
+                            </span>
                         </nav>
                     </header>
 
@@ -112,7 +82,7 @@ export default function Home({
                                     Test a payment flow that feels production-ready.
                                 </h2>
                                 <p className="mt-4 text-base leading-7 text-slate-300">
-                                    This demo stores transactions in MySQL through Laravel and renders the interface with React via Inertia.
+                                    This demo runs without a database and keeps payment activity in dummy session data rendered with React through Inertia.
                                 </p>
                             </div>
 
@@ -298,14 +268,12 @@ export default function Home({
                                             Live mock activity
                                         </h3>
                                     </div>
-                                    {auth.user && (
-                                        <Link
-                                            href={route('dashboard')}
-                                            className="text-sm font-semibold text-sky-700"
-                                        >
-                                            Open dashboard
-                                        </Link>
-                                    )}
+                                    <Link
+                                        href={route('dashboard')}
+                                        className="text-sm font-semibold text-sky-700"
+                                    >
+                                        Open dashboard
+                                    </Link>
                                 </div>
 
                                 <div className="mt-5 space-y-4">

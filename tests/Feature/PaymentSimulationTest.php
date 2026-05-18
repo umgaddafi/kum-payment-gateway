@@ -2,14 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\PaymentTransaction;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PaymentSimulationTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function test_home_page_can_be_rendered(): void
     {
         $this->get('/')->assertOk();
@@ -30,17 +26,13 @@ class PaymentSimulationTest extends TestCase
         ]);
 
         $response->assertRedirect(route('home', absolute: false));
-
-        $this->assertDatabaseHas('payment_transactions', [
-            'customer_email' => 'jane@example.com',
-            'status' => 'successful',
-            'card_last_four' => '4242',
-        ]);
+        $this->followRedirects($response)
+            ->assertSee('Payment approved by mock gateway.');
     }
 
     public function test_large_payments_are_marked_as_pending(): void
     {
-        $this->post('/payments', [
+        $response = $this->post('/payments', [
             'customer_name' => 'Jane Doe',
             'customer_email' => 'jane@example.com',
             'amount' => 5000,
@@ -52,11 +44,7 @@ class PaymentSimulationTest extends TestCase
             'cvv' => '123',
         ]);
 
-        $transaction = PaymentTransaction::query()
-            ->where('customer_email', 'jane@example.com')
-            ->latest('id')
-            ->first();
-
-        $this->assertSame('pending', $transaction?->status);
+        $this->followRedirects($response)
+            ->assertSee('Transaction flagged for manual review because the amount is high.');
     }
 }
