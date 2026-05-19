@@ -63,15 +63,39 @@ export default function Login() {
   }
 
   return (
-    <section className="form-wrap">
-      <form className="panel form-card" onSubmit={handleSubmit}>
-        <p className="eyebrow">Login</p>
-        <h1>Access the dashboard</h1>
+    <section className="login-shell">
+      <div className="panel login-showcase">
+        <p className="eyebrow">Secure Access</p>
+        <h1>Admin access for your payment workspace.</h1>
+        <p className="lead">
+          Use the demo account to preview the protected dashboard, API-backed cards,
+          and the shared-hosting friendly structure.
+        </p>
+
+        <div className="showcase-grid">
+          <article>
+            <span className="showcase-label">Recommended flow</span>
+            <strong>Login, review items, then replace dummy data with MySQL.</strong>
+          </article>
+          <article>
+            <span className="showcase-label">Demo account</span>
+            <strong>admin@example.com / password</strong>
+          </article>
+        </div>
+      </div>
+
+      <form className="panel form-card elevated-form" onSubmit={handleSubmit}>
+        <div className="form-heading">
+          <p className="eyebrow">Login</p>
+          <h1>Access the dashboard</h1>
+          <p className="form-copy">Enter your email and password to continue.</p>
+        </div>
 
         <label className="field">
           <span>Email</span>
           <input
             type="email"
+            placeholder="admin@example.com"
             value={form.email}
             onChange={(event) =>
               setForm((current) => ({ ...current, email: event.target.value }))
@@ -84,6 +108,7 @@ export default function Login() {
           <span>Password</span>
           <input
             type="password"
+            placeholder="Enter your password"
             value={form.password}
             onChange={(event) =>
               setForm((current) => ({ ...current, password: event.target.value }))
@@ -96,7 +121,7 @@ export default function Login() {
 
         {serverError ? <div className="error-banner">{serverError}</div> : null}
 
-        <button className="primary-button" disabled={isSubmitting} type="submit">
+        <button className="primary-button wide-button" disabled={isSubmitting} type="submit">
           {isSubmitting ? 'Signing in...' : 'Login'}
         </button>
       </form>
